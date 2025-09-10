@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./data.db"
+}
+
+model Hospital {
+  cnes          String  @id
+  estado        String
+  cidade        String
+  razao_social  String
+  nome_fantasia String
+  laudos        Laudo[]
+}
+
+model Laudo {
+  id                Int      @id @default(autoincrement())
+  hospital          Hospital @relation(fields: [cnes], references: [cnes])
+  created_at        DateTime @default(now())
+  ready             Boolean  @default(false)
+  cnes              String
+  sistema           String
+  metodo            String
+  data_inicio       String
+  data_fim          String
+  fim_correcao      String
+  n_processo        String
+  data_citacao      String
+  data_distribuicao String
+}
+
+model User {
+  nome  String  @unique
+  senha String
+  admin Boolean @default(false)
+}
