@@ -28,8 +28,8 @@ export interface LD_CreationData {
   cnes: string;
   sistema: 'SIA' | 'SIH';
   metodo: 'TUNEP' | 'IVR' | 'BEST';
-  inicio: string;
-  fim: string;
+  data_inicio: string;
+  data_fim: string;
   fim_correcao: string;
   citacao: string;
   distribuicao: string;
@@ -45,8 +45,8 @@ export interface ScriptParams {
 
   sistema: string;
   metodo: string;
-  inicio: string;
-  fim: string;
+  data_inicio: string;
+  data_fim: string;
   fim_correcao: string;
   citacao: string;
   n_processo: string;
@@ -116,10 +116,10 @@ export class AppService {
     const laudo = await this.prisma.laudo.create({
       data: {
         cnes: data.cnes,
-        data_inicio: data.inicio,
+        data_inicio: data.data_inicio,
         metodo: data.metodo,
         sistema: data.sistema,
-        data_fim: data.fim,
+        data_fim: data.data_fim,
         fim_correcao: data.fim_correcao,
         data_citacao: data.citacao,
         data_distribuicao: data.distribuicao,
@@ -131,8 +131,8 @@ export class AppService {
       cnes: data.cnes,
       estado: hosp.estado,
       sistema: data.sistema,
-      inicio: data.inicio,
-      fim: data.fim,
+      data_inicio: data.data_inicio,
+      data_fim: data.data_fim,
       razao_social: hosp.razao_social,
       nome_fantasia: hosp.nome_fantasia,
       fim_correcao: data.fim_correcao,
@@ -223,7 +223,7 @@ export class AppService {
 
   /**  gera o comando necessário para gerar o laudo com base nos parâmetros fornecidos. */
   buildScriptCommand(params: ScriptParams): string {
-    return `python3 ${ProjPaths.scriptPath()} "${params.cnes}" "${params.estado}" "${params.sistema}" "${params.metodo}" "${params.inicio}" "${params.fim}" "${params.fim_correcao}" "${params.citacao}" "${params.cidade}" "${params.razao_social}" "${params.nome_fantasia}" "${params.n_processo}"`;
+    return `python3 ${ProjPaths.scriptPath()} "${params.cnes}" "${params.estado}" "${params.sistema}" "${params.metodo}" "${params.data_inicio}" "${params.data_fim}" "${params.fim_correcao}" "${params.citacao}" "${params.cidade}" "${params.razao_social}" "${params.nome_fantasia}" "${params.n_processo}"`;
   }
 
   /**  Deleta um laudo do banco de dados junto com os seus arquivos relacionados.*/
