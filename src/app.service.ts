@@ -146,6 +146,7 @@ export class AppService {
     exec(script_command, (err, stdout, stderr) => {
       if (err != null) {
         void this.handleScriptError(laudo.id, stdout, stderr);
+        return;
       }
       void this.handleScriptConclusion(laudo.id);
     });
@@ -162,7 +163,9 @@ export class AppService {
 
   async handleScriptError(id: number, stdout: string, stderr: string) {
     console.log(`Script python falhou para laudo de id: ${id}`);
+    console.log('STDOUT:');
     console.log(stdout);
+    console.log('STDERR:');
     console.log(stderr);
     try {
       await this.deleteLaudo(id);
@@ -172,10 +175,15 @@ export class AppService {
   }
 
   async setLaudoReady(id: number, state: boolean) {
-    await this.prisma.laudo.update({
-      where: { id: id },
-      data: { ready: state },
-    });
+    try {
+      await this.prisma.laudo.update({
+        where: { id: id },
+        data: { ready: state },
+      });
+    } catch (err: any) {
+      console.log(`encontrou-se um problema ao atualizar o laudo de id ${id}.`);
+      console.log(`causa reportada:`, err);
+    }
   }
 
   /** Move os arquivos gerados pelo script de processmento para a pasta onde armazenam-se os laudos */
