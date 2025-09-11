@@ -158,7 +158,12 @@ export class AppService {
   async handleScriptConclusion(id: number) {
     console.log('script concluído com sucesso!');
     await this.gatherScriptResults(id);
-    await this.setLaudoReady(id, true);
+    try {
+      await this.setLaudoReady(id, true);
+    } catch (err: any) {
+      console.log(`Erro ao atualizar o status do laudo de id: ${id}`);
+      console.log('causa reportada', err);
+    }
   }
 
   async handleScriptError(id: number, stdout: string, stderr: string) {
@@ -175,15 +180,10 @@ export class AppService {
   }
 
   async setLaudoReady(id: number, state: boolean) {
-    try {
-      await this.prisma.laudo.update({
-        where: { id: id },
-        data: { ready: state },
-      });
-    } catch (err: any) {
-      console.log(`encontrou-se um problema ao atualizar o laudo de id ${id}.`);
-      console.log(`causa reportada:`, err);
-    }
+    await this.prisma.laudo.update({
+      where: { id: id },
+      data: { ready: state },
+    });
   }
 
   /** Move os arquivos gerados pelo script de processmento para a pasta onde armazenam-se os laudos */
@@ -326,11 +326,8 @@ export class AppService {
 
   /** Função para testes e procedimentos diagnósticos */
   debugLaudos() {
-    try {
-      void this.gatherScriptResults(3);
-    } catch {
-      throw new HttpException('teste de erro.', HttpStatus.BAD_GATEWAY);
-    }
+    ProjPaths.showResultsDir();
+    ProjPaths.showUnitedCsvDir();
   }
 
   /** Retorna uma ReadStream do arquivo pdf de um dado laudo*/
@@ -456,5 +453,21 @@ class ProjPaths {
 
   static storedSihCsvPath(id: number): string {
     return path.join(ProjPaths.laudosDir(), `SIH_${id}.csv`);
+  }
+
+  static showResultsDir() {
+    const files = fs.readdirSync(ProjPaths.scriptResultDir());
+    console.log("files found in script's results dir:");
+    for (const file of files) {
+      console.log(file);
+    }
+  }
+
+  static showUnitedCsvDir() {
+    const files = fs.readdirSync(ProjPaths.unitedCsvsDir());
+    console.log("files found in script's united_csv dir:");
+    for (const file of files) {
+      console.log(file);
+    }
   }
 }
