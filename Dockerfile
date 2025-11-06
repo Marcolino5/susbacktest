@@ -20,7 +20,7 @@ RUN npm audit fix
 RUN npx prisma migrate dev --name init
 RUN npm run build
 
-RUN git clone https://github.com/CJR-UnB/AdvogaSUS-script.git susd
+RUN git clone https://github.com/Marcolino5/susscript.git susd
 
 EXPOSE 3001
 
