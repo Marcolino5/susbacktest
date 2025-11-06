@@ -22,6 +22,7 @@ RUN npm run build
 
 RUN git clone https://github.com/Marcolino5/susscript.git susd
 
+
 EXPOSE 3001
 
 CMD ["npm", "start"]
