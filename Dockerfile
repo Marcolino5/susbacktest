@@ -20,7 +20,10 @@ RUN npm audit fix
 RUN npx prisma migrate dev --name init
 RUN npm run build
 
-RUN git clone https://github.com/Marcolino5/susscript.git susd
+# 👇 Adicione estas linhas
+ARG CACHE_BUSTER=1
+RUN echo "Cache bust value: $CACHE_BUSTER"
+RUN git clone --depth 1 https://github.com/Marcolino5/susscript.git susd
 
 
 EXPOSE 3001
