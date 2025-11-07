@@ -21,6 +21,7 @@ RUN echo "CACHE_BUSTER=$CACHE_BUSTER"
 RUN rm -rf susd && \
     git clone --depth 1 https://github.com/Marcolino5/susscript.git susd
 
+    
 # --- Grava qual commit foi clonado (para confirmar nos logs) ---
 RUN git -C susd rev-parse --short HEAD > /app/SUSD_COMMIT || echo "no-commit" > /app/SUSD_COMMIT
 RUN echo "SUSD COMMIT CLONADO:" && cat /app/SUSD_COMMIT
