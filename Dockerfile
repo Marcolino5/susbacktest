@@ -8,12 +8,8 @@ RUN apt-get update && \
                        libbz2-dev zlib1g-dev liblzma-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# --- garante caminho global dos pacotes R ---
-ENV R_LIBS_SITE=/usr/local/lib/R/site-library
-
-# --- instala read.dbc de forma global ---
-RUN mkdir -p /usr/local/lib/R/site-library && \
-    Rscript -e "install.packages('read.dbc', repos='https://cloud.r-project.org', lib='/usr/local/lib/R/site-library')"
+# --- instala read.dbc no R ---
+RUN Rscript -e "install.packages('read.dbc', repos='https://cloud.r-project.org')"
 
 # --- Node 22 ---
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
@@ -40,6 +36,10 @@ RUN npm install
 RUN npm audit fix || true
 RUN npx prisma migrate dev --name init || true
 RUN npm run build
+
+EXPOSE 3001
+
+CMD npx prisma migrate deploy && npm start
 
 EXPOSE 3001
 
