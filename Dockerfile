@@ -3,17 +3,8 @@ FROM ubuntu:latest
 # --- pacotes do sistema ---
 RUN apt-get update && \
     apt-get install -y curl gnupg git python3 python3-pandas \
-                       texlive-latex-recommended texlive-xetex make \
-                       r-base r-base-dev \
-                       libbz2-dev zlib1g-dev liblzma-dev && \
+                       texlive-latex-recommended texlive-xetex make && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# --- garante caminho global dos pacotes R ---
-ENV R_LIBS_SITE=/usr/local/lib/R/site-library
-
-# --- instala read.dbc de forma global ---
-RUN mkdir -p /usr/local/lib/R/site-library && \
-    Rscript -e "install.packages('read.dbc', repos='https://cloud.r-project.org', lib='/usr/local/lib/R/site-library')"
 
 # --- Node 22 ---
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
@@ -23,6 +14,7 @@ RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
 WORKDIR /app
 
 # --- CACHE BUSTER REAL (funciona no Railway) ---
+# esta linha se altera sempre que houver novo commit no GitHub = força rebuild
 ADD https://api.github.com/repos/Marcolino5/susscript/git/refs/heads/main /tmp/susd_version.json
 
 # --- clone atualizado SEM risco de cache antigo ---
@@ -40,10 +32,6 @@ RUN npm install
 RUN npm audit fix || true
 RUN npx prisma migrate dev --name init || true
 RUN npm run build
-
-EXPOSE 3001
-
-CMD npx prisma migrate deploy && npm start
 
 EXPOSE 3001
 
