@@ -3,8 +3,13 @@ FROM ubuntu:latest
 # --- pacotes do sistema ---
 RUN apt-get update && \
     apt-get install -y curl gnupg git python3 python3-pandas \
-                       texlive-latex-recommended texlive-xetex make && \
+                       texlive-latex-recommended texlive-xetex make \
+                       r-base r-base-dev \
+                       libbz2-dev zlib1g-dev liblzma-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# --- instala read.dbc no R ---
+RUN Rscript -e "install.packages('read.dbc', repos='https://cloud.r-project.org')"
 
 # --- Node 22 ---
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
@@ -14,7 +19,6 @@ RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
 WORKDIR /app
 
 # --- CACHE BUSTER REAL (funciona no Railway) ---
-# esta linha se altera sempre que houver novo commit no GitHub = força rebuild
 ADD https://api.github.com/repos/Marcolino5/susscript/git/refs/heads/main /tmp/susd_version.json
 
 # --- clone atualizado SEM risco de cache antigo ---
