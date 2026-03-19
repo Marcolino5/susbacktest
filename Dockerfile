@@ -1,5 +1,5 @@
 FROM ubuntu:latest
- 
+  
 # --- pacotes do sistema ---
 RUN apt-get update && \
     apt-get install -y curl gnupg git python3 python3-pandas \
