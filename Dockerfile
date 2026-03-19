@@ -3,15 +3,8 @@ FROM ubuntu:latest
 # --- pacotes do sistema ---
 RUN apt-get update && \
     apt-get install -y curl gnupg git python3 python3-pandas \
-                       texlive-latex-recommended texlive-xetex make \
-                       r-base r-base-dev \
-                       libbz2-dev zlib1g-dev liblzma-dev && \
+                       texlive-latex-recommended texlive-xetex make && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# --- instala read.dbc GLOBALMENTE e GARANTE que funciona ---
-RUN mkdir -p /usr/local/lib/R/site-library && \
-    Rscript -e "install.packages('read.dbc', repos='https://cloud.r-project.org', lib='/usr/local/lib/R/site-library')" && \
-    Rscript -e "library(read.dbc, lib.loc='/usr/local/lib/R/site-library')"
 
 # --- Node 22 ---
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
@@ -21,6 +14,7 @@ RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
 WORKDIR /app
 
 # --- CACHE BUSTER REAL (funciona no Railway) ---
+# esta linha se altera sempre que houver novo commit no GitHub = força rebuild
 ADD https://api.github.com/repos/Marcolino5/susscript/git/refs/heads/main /tmp/susd_version.json
 
 # --- clone atualizado SEM risco de cache antigo ---
@@ -31,7 +25,7 @@ RUN rm -rf susd && \
 RUN git -C susd rev-parse --short HEAD > /app/SUSD_COMMIT
 RUN echo "SUSD CLONADO:" && cat /app/SUSD_COMMIT
 
-# --- copia backend ---
+# --- copia backend (susd não será sobrescrito por causa do .dockerignore) ---
 COPY . /app
 
 RUN npm install
