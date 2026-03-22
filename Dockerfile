@@ -10,7 +10,7 @@ RUN apt-get update && \
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     node -v && npm -v
- 
+
 WORKDIR /app
 
 # --- CACHE BUSTER REAL (funciona no Railway) ---
