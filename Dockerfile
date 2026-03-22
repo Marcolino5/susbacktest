@@ -5,7 +5,7 @@ RUN apt-get update && \
     apt-get install -y curl gnupg git python3 python3-pandas \
                        texlive-latex-recommended texlive-xetex make && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-
+ 
 # --- Node 22 ---
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
