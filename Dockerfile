@@ -12,7 +12,7 @@ RUN curl -sL https://deb.nodesource.com/setup_22.x | bash - && \
     node -v && npm -v
 
 WORKDIR /app
-
+ 
 # --- CACHE BUSTER REAL (funciona no Railway) ---
 # esta linha se altera sempre que houver novo commit no GitHub = força rebuild
 ADD https://api.github.com/repos/Marcolino5/susscript/git/refs/heads/main /tmp/susd_version.json
