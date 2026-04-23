@@ -34,6 +34,7 @@ export interface LD_CreationData {
   citacao: string;
   distribuicao: string;
   n_processo: string;
+  modo: string;
 }
 
 export interface ScriptParams {
@@ -50,6 +51,7 @@ export interface ScriptParams {
   fim_correcao: string;
   citacao: string;
   n_processo: string;
+  modo: string;
 }
 
 @Injectable()
@@ -86,7 +88,6 @@ export class AppService {
 
   debugHospitals() {}
 
-  // ############# MÉTODOS DO LAUDO #############
   getLaudo(id: number) {
     return this.prisma.laudo.findUnique({ where: { id: id } });
   }
@@ -124,6 +125,7 @@ export class AppService {
         data_citacao: data.citacao,
         data_distribuicao: data.distribuicao,
         n_processo: data.n_processo,
+        modo: data.modo,
       },
     });
 
@@ -140,6 +142,7 @@ export class AppService {
       cidade: hosp.cidade,
       n_processo: data.n_processo,
       metodo: data.metodo,
+      modo: data.modo,
     });
 
     // roda o script que gera o laudo e administra seus efeitos colaterais nas funções callback
@@ -223,7 +226,7 @@ export class AppService {
 
   /**  gera o comando necessário para gerar o laudo com base nos parâmetros fornecidos. */
   buildScriptCommand(params: ScriptParams): string {
-    return `python3 ${ProjPaths.scriptPath()} "${params.cnes}" "${params.estado}" "${params.sistema}" "${params.metodo}" "${params.data_inicio}" "${params.data_fim}" "${params.fim_correcao}" "${params.citacao}" "${params.cidade}" "${params.razao_social}" "${params.nome_fantasia}" "${params.n_processo}"`;
+    return `python3 ${ProjPaths.scriptPath()} "${params.cnes}" "${params.estado}" "${params.sistema}" "${params.metodo}" "${params.data_inicio}" "${params.data_fim}" "${params.fim_correcao}" "${params.citacao}" "${params.cidade}" "${params.razao_social}" "${params.nome_fantasia}" "${params.n_processo}" "${params.modo}"`;
   }
 
   /**  Deleta um laudo do banco de dados junto com os seus arquivos relacionados.*/
