@@ -37,6 +37,7 @@ model Laudo {
   n_processo        String
   data_citacao      String
   data_distribuicao String
+  modo              String
 }
 
 model User {
