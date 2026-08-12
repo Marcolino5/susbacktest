@@ -3,7 +3,7 @@ FROM ubuntu:latest
 # --- pacotes do sistema ---
 RUN apt-get update && \
     apt-get install -y curl gnupg git python3 python3-pandas \
-                       texlive-latex-recommended texlive-xetex make && \
+                       texlive-latex-recommended texlive-xetex make build-essential && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # --- Node 22 ---
