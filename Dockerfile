@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 # --- pacotes do sistema ---
 RUN apt-get update && \
-    apt-get install -y curl gnupg git python3 python3-pandas \
+    apt-get install -y curl gnupg git python3 python3-pandas python3-requests \
                        texlive-latex-recommended texlive-xetex make build-essential && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
