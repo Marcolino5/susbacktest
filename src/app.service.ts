@@ -50,6 +50,7 @@ export interface ScriptParams {
   data_fim: string;
   fim_correcao: string;
   citacao: string;
+  distribuicao: string;
   n_processo: string;
   modo: string;
 }
@@ -139,6 +140,7 @@ export class AppService {
       nome_fantasia: hosp.nome_fantasia,
       fim_correcao: data.fim_correcao,
       citacao: data.citacao,
+      distribuicao: data.distribuicao,
       cidade: hosp.cidade,
       n_processo: data.n_processo,
       metodo: data.metodo,
@@ -226,8 +228,9 @@ export class AppService {
 
   /**  gera o comando necessário para gerar o laudo com base nos parâmetros fornecidos. */
   buildScriptCommand(params: ScriptParams): string {
-    return `python3 ${ProjPaths.scriptPath()} "${params.cnes}" "${params.estado}" "${params.sistema}" "${params.metodo}" "${params.data_inicio}" "${params.data_fim}" "${params.fim_correcao}" "${params.citacao}" "${params.cidade}" "${params.razao_social}" "${params.nome_fantasia}" "${params.n_processo}" "${params.modo}"`;
+      return `python3 ${ProjPaths.scriptPath()} "${params.cnes}" "${params.estado}" "${params.sistema}" "${params.metodo}" "${params.data_inicio}" "${params.data_fim}" "${params.fim_correcao}" "${params.citacao}" "${params.cidade}" "${params.razao_social}" "${params.nome_fantasia}" "${params.n_processo}" "${params.modo}" "${params.distribuicao}"`;
   }
+
 
   /**  Deleta um laudo do banco de dados junto com os seus arquivos relacionados.*/
   async deleteLaudo(id: number) {
