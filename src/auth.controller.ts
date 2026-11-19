@@ -8,7 +8,7 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Response } from 'express';
+import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { Public } from './auth.guard';
 
